@@ -1,0 +1,72 @@
+
+.add__post-social__media {
+    width: 50%;
+    border: 3px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: none;
+    
+}
+
+.add__post-social__media-input input{
+    width: 98.5%;
+    height: 10vh;
+    text-align: center;
+    outline: none;
+    border-radius: 2rem;
+    border: none;
+}
+
+.add__post-social__media-add {
+    display: flex;
+    justify-content: space-between;
+}
+
+.add__post-social__media-add__post button {
+    background-image: linear-gradient(to right, #16A085 0%, #F4D03F 51%, #16A085 100%)
+}
+
+.add__post-social__media-add__post button {
+    margin: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 1rem;
+    display: block;
+    border: none;
+}
+
+.add__post-social__media-add__post button:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+}
+
+.add__post-social__media-add__media button {
+    background-image: linear-gradient(to right, #1A2980 0%, #26D0CE 51%, #1A2980 100%)
+}
+
+.add__post-social__media-add__media button {
+    margin: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 10px;
+    display: block;
+    border: none;
+}
+
+.add__post-social__media-add__media button:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+

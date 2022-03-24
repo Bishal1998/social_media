@@ -1,7 +1,11 @@
-.App {
+h2 {
   text-align: center;
+  color: white;
 }
-
+.App {
+  display: flex;
+  justify-content: center;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
