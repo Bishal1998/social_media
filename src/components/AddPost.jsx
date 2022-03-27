@@ -1,9 +1,9 @@
 import "./AddPost.css";
 import { MdOutlineUploadFile } from "react-icons/md";
 import Display from "./Display";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { storage, db } from "../firebase-config";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, orderBy, query } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const AddPost = () => {
@@ -12,18 +12,21 @@ const AddPost = () => {
     const postCollectionRef = collection(db, "data");
     const [cap, setCap] = useState("");
     const [file, setFile] = useState();
+    const fileRef = useRef();
 
     const getPost = async () => {
-        const data = await getDocs(postCollectionRef);
+        const q = query(postCollectionRef, orderBy('caption', 'asc'))
+        const data = await getDocs(q);
         setPost(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
     useEffect(() => {
         getPost();
-    }, []);
+    }, [post]);
 
     const imageUpload = (e) => {
         setFile(e.target.files[0]);
+        console.log(fileRef.current.value)
     };
 
     const handlePublish = () => {
@@ -44,7 +47,7 @@ const AddPost = () => {
             },
             () => {
                 setCap("");
-                setFile("");
+                setFile();
                 getDownloadURL(uploadImage.snapshot.ref).then((url) => {
                     addDoc(postCollectionRef, {
                         caption: cap,
@@ -52,6 +55,7 @@ const AddPost = () => {
                     })
                         .then(() => {
                             alert("Post submitted successfully");
+                            fileRef.current.value = ""
                         })
                         .catch((err) => {
                             alert(`${err} Error`);
@@ -80,9 +84,8 @@ const AddPost = () => {
                         multiple={true}
                         type="file"
                         accept="image/*"
-                    // hidden
+                        ref={fileRef}
                     />
-                    {/* <button onClick={imageUpload}><MdOutlinePermMedia /> Add Photo</button> */}
                 </div>
                 <div className="add__post-social__media-add__post">
                     <button onClick={handlePublish}>
