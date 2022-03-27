@@ -46,11 +46,11 @@
     text-decoration: none;
 }
 
-.add__post-social__media-add__media button {
+.add__post-social__media-add__media input {
     background-image: linear-gradient(to right, #1A2980 0%, #26D0CE 51%, #1A2980 100%)
 }
 
-.add__post-social__media-add__media button {
+.add__post-social__media-add__media input {
     margin: 0.5rem;
     padding: 1rem;
     text-align: center;
@@ -63,7 +63,7 @@
     border: none;
 }
 
-.add__post-social__media-add__media button:hover {
+.add__post-social__media-add__media input:hover {
     background-position: right center;
     /* change the direction of the change here */
     color: #fff;

@@ -1,40 +1,32 @@
 import "./AddPost.css";
 import { MdOutlineUploadFile } from "react-icons/md";
-import Display from "./Display";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { storage, db } from "../firebase-config";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
-const AddPost = () => {
+const Update = ({ id, img, cap }) => {
 
-    const [post, setPost] = useState([]);
-    const postCollectionRef = collection(db, "data");
-    const [cap, setCap] = useState("");
-    const [file, setFile] = useState();
 
-    const getPost = async () => {
-        const data = await getDocs(postCollectionRef);
-        setPost(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-
-    useEffect(() => {
-        getPost();
-    }, []);
+    const postCollectionRef = doc(db, "data", id);
+    const [title, setTitle] = useState(cap);
+    const [updateFile, setUpdateFile] = useState(img);
+    console.log(title)
+    console.log(updateFile)
 
     const imageUpload = (e) => {
-        setFile(e.target.files[0]);
+        setUpdateFile(e.target.files[0]);
     };
 
-    const handlePublish = () => {
-        if (!cap || !file) {
+    const handleUpdate = () => {
+        if (!title || !updateFile) {
             alert("Please fill all the fields");
             return;
         }
 
-        const storageRef = ref(storage, `/images/${file.name}`);
+        const storageRef = ref(storage, `/images/${updateFile.name}`);
 
-        const uploadImage = uploadBytesResumable(storageRef, file);
+        const uploadImage = uploadBytesResumable(storageRef, updateFile);
 
         uploadImage.on(
             "state_changed",
@@ -43,15 +35,15 @@ const AddPost = () => {
                 console.log(err);
             },
             () => {
-                setCap("");
-                setFile("");
+                setTitle("");
+                setUpdateFile();
                 getDownloadURL(uploadImage.snapshot.ref).then((url) => {
-                    addDoc(postCollectionRef, {
-                        caption: cap,
+                    updateDoc(postCollectionRef, {
+                        caption: title,
                         img: url,
                     })
                         .then(() => {
-                            alert("Post submitted successfully");
+                            alert("Post Updated successfully");
                         })
                         .catch((err) => {
                             alert(`${err} Error`);
@@ -61,6 +53,7 @@ const AddPost = () => {
         );
     };
 
+
     return (
         <div className="add__post-social__media">
             <div className="add__post-social__media-input">
@@ -68,8 +61,8 @@ const AddPost = () => {
                     type="text"
                     placeholder="What's in your mind ?"
                     autoFocus
-                    value={cap}
-                    onChange={(e) => setCap(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     required
                 />
             </div>
@@ -80,26 +73,16 @@ const AddPost = () => {
                         multiple={true}
                         type="file"
                         accept="image/*"
-                    // hidden
                     />
-                    {/* <button onClick={imageUpload}><MdOutlinePermMedia /> Add Photo</button> */}
                 </div>
                 <div className="add__post-social__media-add__post">
-                    <button onClick={handlePublish}>
-                        <MdOutlineUploadFile /> Upload Post
+                    <button onClick={handleUpdate}>
+                        <MdOutlineUploadFile /> Update Post
                     </button>
                 </div>
             </div>
-            <Display post={post} />
         </div>
     );
 };
 
-export default AddPost;
-
-// const createPost = async () => {
-//         await addDoc(postCollectionRef, {caption : cap, img :  file});
-
-//         setCap('');
-//         setFile('');
-//     }
+export default Update;
